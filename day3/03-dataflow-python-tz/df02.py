@@ -34,8 +34,10 @@ if __name__ == '__main__':
       airports = (pipeline
          | beam.io.ReadFromText('airports.csv.gz')
          | beam.Map(lambda line: next(csv.reader([line])))
-         | beam.Map(lambda fields: (fields[0], addtimezone(fields[21], fields[26])))
+         | beam.Map(lambda fields: (fields[0], (fields[21], fields[26])))
       )
+
+      # TODO: enrich pipeline leveraging 'addtimezone' function to increase data with Timezone information
 
       airports | beam.Map(lambda (airport, data): '{},{}'.format(airport, ','.join(data)) )| beam.io.textio.WriteToText('airports_with_tz')
 

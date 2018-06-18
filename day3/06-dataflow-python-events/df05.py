@@ -110,10 +110,7 @@ def run():
 
       events = flights | beam.FlatMap(get_next_event)
 
-      (events
-         | 'events:tostring' >> beam.Map(lambda fields: ','.join(fields))
-         | 'events:out' >> beam.io.textio.WriteToText('all_events')
-      )
+      # TODO: generare un secondo flusso "all_events" per gli eventi (in modo da preservare 'all_flights')
 
       pipeline.run()
 

@@ -69,8 +69,9 @@ if __name__ == '__main__':
 
       flights = (pipeline
          | 'flights:read' >> beam.io.ReadFromText('201501_part.csv')
-         | 'flights:tzcorr' >> beam.FlatMap(tz_correct, beam.pvalue.AsDict(airports))
       )
+
+      # TODO: Load a single month of flight information and use AIRPORT->LAT/LON/TZ mapping as side-input to convert timestamps to UTC
 
       flights | beam.io.textio.WriteToText('all_flights')
 

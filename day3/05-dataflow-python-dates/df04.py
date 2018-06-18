@@ -65,13 +65,11 @@ def tz_correct(line, airport_timezones):
       for f in [18, 20, 21]: #wheelson, crsarrtime, arrtime
          fields[f], arrtz = as_utc(fields[0], fields[f], arr_timezone)
       
-      for f in [17, 18, 20, 21]:
-         fields[f] = add_24h_if_before(fields[f], fields[14])
+      # TODO: Correggere le date di arrivo (17, 18, 20, 21) nel caso di arrivi "il giorno dopo"
 
-      fields.extend(airport_timezones[dep_airport_id])
-      fields[-1] = str(deptz)
-      fields.extend(airport_timezones[arr_airport_id])
-      fields[-1] = str(arrtz)
+      # Gia' che abbiamo le informazioni sulla time-zone degli aeroporti di partenza ed arrivo
+      # ha senso "denormalizzarla" sul flusso degli eventi per averla sempre a disposizione
+      # TODO: Aggiungere le time-zone di partenza e destinazione come 2 ulteriori campi in fondo
 
       yield ','.join(fields)
 

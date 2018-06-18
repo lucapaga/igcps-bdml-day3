@@ -23,7 +23,6 @@ if __name__ == '__main__':
       airports = (pipeline
          | beam.io.ReadFromText('../01-getdata/airports.csv.gz')
          | beam.Map(lambda line: next(csv.reader([line])))
-#         | beam.Map(lambda fields: (fields[0], (fields[21], fields[26])))
       )
 
 
