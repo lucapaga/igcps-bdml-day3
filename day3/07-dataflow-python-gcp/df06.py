@@ -110,16 +110,18 @@ def create_row(fields):
     return featdict
  
 def run(project, bucket, dataset):
+   # TODO: Riconfigurare la Pipeline per fare in modo che esegua su Google Cloud Dataflow e NON in LOCALE
    argv = [
       '--project={0}'.format(project),
-      '--job_name=ch04timecorr',
+      '--job_name=telemarday3dfpy',
       '--save_main_session',
       '--staging_location=gs://{0}/flights/staging/'.format(bucket),
       '--temp_location=gs://{0}/flights/temp/'.format(bucket),
       '--setup_file=./setup.py',
       '--max_num_workers=10',
+      '--zone=europe-west3-a',
       '--autoscaling_algorithm=THROUGHPUT_BASED',
-      '--runner=DataflowRunner'
+      '--runner=DirectRunner'
    ]
    airports_filename = 'gs://{}/flights/airports/airports.csv.gz'.format(bucket)
    flights_raw_files = 'gs://{}/flights/raw/*.csv'.format(bucket)
@@ -163,9 +165,11 @@ if __name__ == '__main__':
    parser = argparse.ArgumentParser(description='Run pipeline on the cloud')
    parser.add_argument('-p','--project', help='Unique project ID', required=True)
    parser.add_argument('-b','--bucket', help='Bucket where your data were ingested in Chapter 2', required=True)
-   parser.add_argument('-d','--dataset', help='BigQuery dataset', default='flights')
+
+   # TODO: make BigQuery Dataset configurable
+
    args = vars(parser.parse_args())
 
-   print "Correcting timestamps and writing to BigQuery dataset {}".format(args['dataset'])
+   print "Correcting timestamps and writing to BigQuery dataset {}".format("flights")
   
-   run(project=args['project'], bucket=args['bucket'], dataset=args['dataset'])
+   run(project=args['project'], bucket=args['bucket'], dataset="flights")

@@ -65,7 +65,7 @@ def tz_correct(line, airport_timezones):
       for f in [18, 20, 21]: #wheelson, crsarrtime, arrtime
          fields[f], arrtz = as_utc(fields[0], fields[f], arr_timezone)
       
-      # TODO: Correggere le date di arrivo (17, 18, 20, 21) nel caso di arrivi "il giorno dopo"
+      # TODO: Correggere l_E_ dat_E_ di arrivo nel caso di arrivi "il giorno dopo" applicando la funzione 'add_24h_if_before'
 
       # Gia' che abbiamo le informazioni sulla time-zone degli aeroporti di partenza ed arrivo
       # ha senso "denormalizzarla" sul flusso degli eventi per averla sempre a disposizione
@@ -77,13 +77,13 @@ if __name__ == '__main__':
    with beam.Pipeline('DirectRunner') as pipeline:
 
       airports = (pipeline
-         | 'airports:read' >> beam.io.ReadFromText('airports.csv.gz')
+         | 'airports:read' >> beam.io.ReadFromText('../01-getdata/airports.csv.gz')
          | 'airports:fields' >> beam.Map(lambda line: next(csv.reader([line])))
          | 'airports:tz' >> beam.Map(lambda fields: (fields[0], addtimezone(fields[21], fields[26])))
       )
 
       flights = (pipeline
-         | 'flights:read' >> beam.io.ReadFromText('201501_part.csv')
+         | 'flights:read' >> beam.io.ReadFromText('../01-getdata/201501_part.csv')
          | 'flights:tzcorr' >> beam.FlatMap(tz_correct, beam.pvalue.AsDict(airports))
       )
 

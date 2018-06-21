@@ -9,7 +9,7 @@
         ```
 * Parsing airports data:
 	```
-	./df01.py
+	python df01.py
 	head extracted_airports-00000*
 	rm extracted_airports-*
 	```

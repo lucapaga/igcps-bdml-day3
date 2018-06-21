@@ -4,7 +4,7 @@
 ### Batch processing in DataFlow
 * Adding timezone information:
 	```
-	./df02.py
+	python df02.py
 	head airports_with_tz-00000*
 	rm airports_with_tz-*
 	```
